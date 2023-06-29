@@ -1,17 +1,31 @@
 #include "Core/Random.h"
 #include "Core/FileIO.h"
-//#include "Core/Memory.h"
+#include "Core/Memory.h"
 #include <iostream>
+#include <chrono>
 
 using namespace std;
 
 int main() 
 {
-	//int* p = new int;
+	kiko::g_memoryTracker.DisplayInfo();
+	int* p = new int;
+	kiko::g_memoryTracker.DisplayInfo();
+	delete p;
+	kiko::g_memoryTracker.DisplayInfo();
 
-	//delete p;
+	auto start = std::chrono::high_resolution_clock::now();
+	for (int i = 0; i < 100000000; i++) {}
+	auto end = std::chrono::high_resolution_clock::now();
 
-	cout << kiko::getFilePath() << endl;
+	cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << endl;
+
+
+
+
+
+
+	/*cout << kiko::getFilePath() << endl;
 	kiko::setFilePath("Assets");
 	cout << kiko::getFilePath() << endl;
 	size_t size;
@@ -27,5 +41,5 @@ int main()
 
 		cout << Kiko::random(5, 20) << endl;
 
-	}
+	}*/
 }
