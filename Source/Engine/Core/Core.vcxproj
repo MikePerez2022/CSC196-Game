@@ -139,15 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\..\..\..\Downloads\Time.h" />
     <ClInclude Include="FileIO.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\..\..\Downloads\Time.cpp" />
     <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

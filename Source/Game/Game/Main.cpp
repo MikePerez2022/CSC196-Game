@@ -1,8 +1,9 @@
 #include "Core/Random.h"
 #include "Core/FileIO.h"
 #include "Core/Memory.h"
+#include "Core/Time.h"
+#include "Renderer/Renderer.h"
 #include <iostream>
-#include <chrono>
 
 using namespace std;
 
@@ -14,11 +15,9 @@ int main()
 	delete p;
 	kiko::g_memoryTracker.DisplayInfo();
 
-	auto start = std::chrono::high_resolution_clock::now();
-	for (int i = 0; i < 100000000; i++) {}
-	auto end = std::chrono::high_resolution_clock::now();
-
-	cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << endl;
+	kiko::Time Timer;
+	for (int i = 0; i < 10000000; i++) {}
+	cout << Timer.GetElapsedSeconds() << endl;
 
 
 

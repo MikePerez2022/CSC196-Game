@@ -16,7 +16,7 @@
     <ClInclude Include="Memory.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\..\..\Downloads\Time.h">
+    <ClInclude Include="Time.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
@@ -27,7 +27,7 @@
     <ClCompile Include="Memory.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\..\..\Downloads\Time.cpp">
+    <ClCompile Include="Time.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
