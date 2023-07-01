@@ -20,8 +20,13 @@ int main()
 	cout << Timer.GetElapsedSeconds() << endl;
 
 
+	//jojo::CreateWindow("CSC196", 800, 600);
+	//cin.get(); // pause
 
 
+
+
+	//________________________________________________//
 
 
 	/*cout << kiko::getFilePath() << endl;
