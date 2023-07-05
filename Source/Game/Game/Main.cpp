@@ -7,43 +7,28 @@
 
 using namespace std;
 
-int main() 
+int main(int argc, char* argv[])
 {
-	kiko::g_memoryTracker.DisplayInfo();
-	int* p = new int;
-	kiko::g_memoryTracker.DisplayInfo();
-	delete p;
-	kiko::g_memoryTracker.DisplayInfo();
+	jojo::Renderer renderer;
+	renderer.Initalize();
+	renderer.CreateWindow("CSC196", 800, 600);
 
-	kiko::Time Timer;
-	for (int i = 0; i < 10000000; i++) {}
-	cout << Timer.GetElapsedSeconds() << endl;
-
-
-	//jojo::CreateWindow("CSC196", 800, 600);
-	//cin.get(); // pause
+	while (true) 
+	{
+		renderer.SetColor(0, 0, 0, 0);
+		renderer.BeginFrame();
+		//Draw
 
 
+		 
+		renderer.DrawLine(kiko::random(800), kiko::random(600), kiko::random(800), kiko::random(600)); 
 
-
-	//________________________________________________//
-
-
-	/*cout << kiko::getFilePath() << endl;
-	kiko::setFilePath("Assets");
-	cout << kiko::getFilePath() << endl;
-	size_t size;
-	kiko::getFileSize("game.txt", size);
-	cout << size << endl;
-
-	std::string s;
-	kiko::readFile("game.txt", s);
-	cout << s << endl;
-
-	Kiko::seedRandom((unsigned int)time(nullptr));
-	for (int i = 0; i < 10; i++) {
-
-		cout << Kiko::random(5, 20) << endl;
-
-	}*/
+		for (int i = 0; i < 1000; i++)
+		{
+			renderer.SetColor(kiko::random(256), kiko::random(256), kiko::random(256), 255);
+			renderer.DrawPoint(kiko::random(renderer.GetWidth()), kiko::random(renderer.GetHeight()));
+		}
+		renderer.EndFrame();
+	}
+	return 0;
 }
