@@ -30,4 +30,6 @@ namespace jojo
 		Vector2& operator /= (const Vector2& v) { x /= v.x, y /= v.y; return *this; }
 		Vector2& operator *= (const Vector2& v) { x *= v.x, y *= v.y; return *this; }
 	};
+
+	using vec2 = Vector2;
 }

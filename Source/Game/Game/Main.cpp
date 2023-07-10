@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 			
 		}
 
-		renderer.DrawLine(kiko::random(800), kiko::random(600), kiko::random(800), kiko::random(600)); 
+		//renderer.DrawLine(kiko::random(800), kiko::random(600), kiko::random(800), kiko::random(600)); 
 
 		//for (int i = 0; i < 1000; i++)
 		//{
@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
 		//	renderer.SetColor(kiko::random(256), kiko::random(256), kiko::random(256), 255);
 		//	renderer.DrawPoint(pos.x, pos.y);
 		//}
-		renderer.EndFrame();
+		//renderer.EndFrame();
 	}
 	return 0;
 }
