@@ -2,6 +2,8 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/Model.h"
 #include "Input/InputSystem.h"
+#include "Player.h"
+#include "Enemy.h"
 #include <iostream>
 #include <vector>
 #include <thread>
@@ -34,18 +36,20 @@ public:
 
 int main(int argc, char* argv[])
 {
+	auto m1 = jojo::Max(4.0f, 3.0f);
+	int m2 = jojo::Max(4, 3);
 
-	constexpr float a = jojo::DegreesToRadians(180.0f);
+	constexpr float a = jojo::DegreesToRadians(180);
 
 	kiko::seedRandom((unsigned int)time(nullptr));
 	kiko::setFilePath("assets");
 
-	jojo::Renderer renderer;
-	renderer.Initalize();
-	renderer.CreateWindow("CSC196", 800, 600);
+	
+	jojo::g_renderer.Initalize();
+	jojo::g_renderer.CreateWindow("CSC196", 800, 600);
 
-	jojo::InputSystem inputSystem;
-	inputSystem.Initialize();
+
+	jojo::g_inputSystem.Initialize();
 
 
 	std::vector<jojo::vec2> pointsj{ {-3, -2}, { 0,4 }, { 3,-2 }, { 0,-1 }, { -3, -2 } }; //{ {-10, 5}, { 10,5 }, { 0,-5 }, { -10,5 } };
@@ -57,8 +61,8 @@ int main(int argc, char* argv[])
 	vector<jojo::Vector2> points;
 	for (int i = 0; i < 1000; i++)
 	{
-		jojo::Vector2 pos(kiko::random(renderer.GetWidth()), kiko::random(renderer.GetHeight()));
-		jojo::Vector2 vel(kiko::randomf(1, 4), 0.0f);
+		jojo::Vector2 pos(kiko::random(jojo::g_renderer.GetWidth()), kiko::random(jojo::g_renderer.GetHeight()));
+		jojo::Vector2 vel(kiko::randomf(100, 400), 0.0f);
 		Stars.push_back(Star(pos, vel));
 	}
 
@@ -69,31 +73,31 @@ int main(int argc, char* argv[])
 	float speed = 200;
 	constexpr float turnRate = jojo::DegreesToRadians(180);
 
+	Player player{200, jojo::Pi, {{400,300},0,6}, model };
+
+	std::vector<Enemy> eneimies;
+	Enemy enemy{200, jojo::Pi, {{400,300}, kiko::randomf(jojo::Pi), 3}, model};
+
+	for (int i = 0; i < 20; i++) 
+	{
+		Enemy enemy{ 200, jojo::Pi, {{400,300}, kiko::randomf(jojo::Pi), 3}, model };
+		eneimies.push_back(enemy);
+	}
+
 	//Main game loop
 	bool quit = false;	
 	while (!quit) 
 	{
 		kiko::g_time.Tick();
 
-		inputSystem.Update();
+		jojo::g_inputSystem.Update();
 				
-		if (inputSystem.GetKeyDown(SDL_SCANCODE_ESCAPE)) {
+		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_ESCAPE)) {
 			quit = true;
 		}
 
-		float rotate = 0;
-		if (inputSystem.GetKeyDown(SDL_SCANCODE_A)) rotate = -1;
-		if (inputSystem.GetKeyDown(SDL_SCANCODE_D)) rotate = 1;
-		transform.rotation += rotate * turnRate * kiko::g_time.GetDeltaTime();
-		
-
-		float thrust = 0;
-		if (inputSystem.GetKeyDown(SDL_SCANCODE_W)) thrust = 1;
-
-		jojo::vec2 forward = jojo::vec2{ 0,1 }.Rotate(transform.rotation);
-		transform.position += forward * speed * thrust * kiko::g_time.GetDeltaTime();
-		transform.position.x = jojo::Wrap(transform.position.x, renderer.GetWidth());
-		transform.position.y = jojo::Wrap(transform.position.y, renderer.GetHeight());
+		player.Update(kiko::g_time.GetDeltaTime());
+		for(auto& enemy : eneimies) enemy.Update(kiko::g_time.GetDeltaTime());
 
 
 		//jojo::vec2 direction;
@@ -111,23 +115,26 @@ int main(int argc, char* argv[])
 		//	std::cout << "( " << inputSystem.GetMousePosition().x << ", " << inputSystem.GetMousePosition().y << " )" << endl;
 		//}
 		
-		renderer.SetColor(0, 0, 0, 0);
-		renderer.BeginFrame();
+		jojo::g_renderer.SetColor(0, 0, 0, 0);
+		jojo::g_renderer.BeginFrame();
 
 		//draw
 		
 		jojo::Vector2 vel(1.0f, 0.3f);
 		for (auto& star : Stars)
 		{
-			star.Update(renderer.GetWidth(), renderer.GetHeight());
-			renderer.SetColor(kiko::random(256), kiko::random(256), kiko::random(256), 255);	
+			star.Update(jojo::g_renderer.GetWidth(), jojo::g_renderer.GetHeight());
+			jojo::g_renderer.SetColor(kiko::random(256), kiko::random(256), kiko::random(256), 255);
+			star.Draw(jojo::g_renderer);
 		}
 
+		player.Draw(jojo::g_renderer);
+		for (auto& enemy : eneimies) enemy.Draw(jojo::g_renderer);
 		
 
-		model.Draw(renderer, transform.position, transform.rotation, transform.scale);
+		//model.Draw(jojo::g_renderer, transform.position, transform.rotation, transform.scale);
 		
-		renderer.EndFrame();
+		jojo::g_renderer.EndFrame();
 
 
 	}

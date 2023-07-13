@@ -7,6 +7,7 @@ namespace kiko
 	{
 		return std::filesystem::current_path().string();
 	}
+
 	bool setFilePath(const std::filesystem::path& path)
 	{
 		std::error_code ec;
@@ -14,11 +15,13 @@ namespace kiko
 
 		return ec.value() == 0;
 	}
+
 	bool fileExsists(const std::filesystem::path& path)
 	{
 		return std::filesystem::exists(path);
 		
 	}
+
 	bool getFileSize(const std::filesystem::path& path, size_t& size)
 	{
 		std::error_code ec;
@@ -26,6 +29,7 @@ namespace kiko
 
 		return ec.value() == 0;
 	}
+
 	bool readFile(const std::filesystem::path& path, std::string buffer)
 	{
 		if (!fileExsists(path)) return false;

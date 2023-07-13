@@ -2,6 +2,8 @@
 
 namespace jojo
 {
+
+	Renderer g_renderer;
 	
 	bool Renderer::Initalize()
 	{

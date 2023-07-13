@@ -33,4 +33,6 @@ namespace jojo
 		std::array<uint8_t, 4> m_mouseButtonState; 
 		std::array<uint8_t, 4> m_prevMouseButtonState;
 	};
+
+	extern InputSystem g_inputSystem;
 }
