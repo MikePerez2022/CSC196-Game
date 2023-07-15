@@ -1,7 +1,7 @@
 #pragma once
 #include <chrono>
 
-namespace kiko
+namespace jojo
 {
 	class Time
 	{

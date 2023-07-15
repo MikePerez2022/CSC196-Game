@@ -1,6 +1,6 @@
 #pragma once
 
-namespace kiko
+namespace jojo
 {
 	struct MemoryAllocation
 	{

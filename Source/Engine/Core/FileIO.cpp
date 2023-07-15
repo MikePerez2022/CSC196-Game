@@ -1,7 +1,7 @@
 #include "FileIO.h"
 #include <fstream>
 
-namespace kiko
+namespace jojo
 {
 	std::string getFilePath()
 	{

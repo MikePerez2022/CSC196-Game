@@ -7,7 +7,7 @@ namespace jojo
 	{
 		std::string buffer;
 
-		kiko::readFile(fileName, buffer);
+		jojo::readFile(fileName, buffer);
 		
 		std::istringstream stream(buffer);
 		

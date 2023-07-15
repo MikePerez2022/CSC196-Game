@@ -3,41 +3,41 @@
 
 using namespace std;
 
-kiko::MemoryTracker kiko::g_memoryTracker;
+jojo::MemoryTracker jojo::g_memoryTracker;
 
-void* operator new (size_t size)
+inline void* operator new (size_t size)
 {
 	void* p = malloc(size);
 
-	kiko::g_memoryTracker.add(p, size);
+	jojo::g_memoryTracker.add(p, size);
 
 	
 	return p;
 }
 
-void operator delete (void* address, size_t size)
+inline void operator delete (void* address, size_t size)
 {
-	kiko::g_memoryTracker.remove(address, size);
+	jojo::g_memoryTracker.remove(address, size);
 
 	free(address);
 
 }
 
-namespace kiko
+namespace jojo
 {
-	void kiko::MemoryTracker::add(void* address, size_t size)
+	void jojo::MemoryTracker::add(void* address, size_t size)
 	{
 		m_bytesAllocated += size;
 		m_numAllocations++;
 	}
 
-	void kiko::MemoryTracker::remove(void* address, size_t size)
+	void jojo::MemoryTracker::remove(void* address, size_t size)
 	{
 		m_bytesAllocated -= size;
 		m_numAllocations--;
 	}
 
-	void kiko::MemoryTracker::DisplayInfo()
+	void jojo::MemoryTracker::DisplayInfo()
 	{
 		cout << "Current bytes allocated: " << m_bytesAllocated << endl;
 		cout << "Current number allocations: " << m_numAllocations << endl;

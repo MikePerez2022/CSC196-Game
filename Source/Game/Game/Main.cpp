@@ -4,6 +4,7 @@
 #include "Input/InputSystem.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "..\Engine\Audio\AudioSystem.h"
 #include <iostream>
 #include <vector>
 #include <thread>
@@ -19,9 +20,9 @@ public:
 
 	void Update(int width, int height)
 	{
-		m_pos += m_vel + kiko::g_time.GetDeltaTime();
+		m_pos += m_vel + jojo::g_time.GetDeltaTime();
 		if (m_pos.x >= width) m_pos.x = 0;
-		if (m_pos.x >= height) m_pos.x = 200;
+		if (m_pos.x >= height) m_pos.x = 0;
 	}
 
 	void Draw(jojo::Renderer& renderer)
@@ -37,14 +38,18 @@ public:
 int main(int argc, char* argv[])
 {
 
+	jojo::AudioSystem audioSystem;
+
+	audioSystem.Initialize();
+	audioSystem.AddAudio("hit", "Hit.WAV");
 
 	auto m1 = jojo::Max(4.0f, 3.0f);
 	int m2 = jojo::Max(4, 3);
 
 	constexpr float a = jojo::DegreesToRadians(180);
 
-	kiko::seedRandom((unsigned int)time(nullptr));
-	kiko::setFilePath("assets");
+	jojo::seedRandom((unsigned int)time(nullptr));
+	jojo::setFilePath("assets");
 
 	
 	jojo::g_renderer.Initalize();
@@ -63,8 +68,8 @@ int main(int argc, char* argv[])
 	vector<jojo::Vector2> points;
 	for (int i = 0; i < 1000; i++)
 	{
-		jojo::Vector2 pos(kiko::random(jojo::g_renderer.GetWidth()), kiko::random(jojo::g_renderer.GetHeight()));
-		jojo::Vector2 vel(kiko::randomf(100,400), 0.0f);
+		jojo::Vector2 pos(jojo::random(jojo::g_renderer.GetWidth()), jojo::random(jojo::g_renderer.GetHeight()));
+		jojo::Vector2 vel(jojo::randomf(100,400), 0.0f);
 		Stars.push_back(Star(pos, vel));
 	}
 
@@ -78,11 +83,11 @@ int main(int argc, char* argv[])
 	Player player{200, jojo::Pi, {{400,300},0,6}, model };
 
 	std::vector<Enemy> enemies;
-	Enemy enemy{200, jojo::Pi, {{400,300}, kiko::randomf(jojo::Pi), 3}, model};
+	Enemy enemy{200, jojo::Pi, {{400,300}, jojo::randomf(jojo::Pi), 3}, model};
 
 	for (int i = 0; i < 20; i++) 
 	{
-		Enemy enemy{ 200, jojo::Pi, {{400,300}, kiko::randomf(jojo::Pi), 3}, model };
+		Enemy enemy{ 200, jojo::Pi, {{400,300}, jojo::randomf(jojo::Pi), 3}, model };
 		enemies.push_back(enemy);
 	}
 
@@ -90,7 +95,7 @@ int main(int argc, char* argv[])
 	bool quit = false;	
 	while (!quit) 
 	{
-		kiko::g_time.Tick();
+		jojo::g_time.Tick();
 
 		jojo::g_inputSystem.Update();
 				
@@ -98,8 +103,14 @@ int main(int argc, char* argv[])
 			quit = true;
 		}
 
-		player.Update(kiko::g_time.GetDeltaTime());
-		for(auto& enemy : enemies) enemy.Update(kiko::g_time.GetDeltaTime());
+		player.Update(jojo::g_time.GetDeltaTime());
+		for(auto& enemy : enemies) enemy.Update(jojo::g_time.GetDeltaTime());
+
+		audioSystem.Update();
+		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
+		{
+			audioSystem.PlayOneShot("hit");
+		}		
 
 
 		//jojo::vec2 direction;
@@ -126,7 +137,7 @@ int main(int argc, char* argv[])
 		for (auto& star : Stars)
 		{
 			star.Update(jojo::g_renderer.GetWidth(), jojo::g_renderer.GetHeight());
-			jojo::g_renderer.SetColor(kiko::random(256), kiko::random(256), kiko::random(256), 255);
+			jojo::g_renderer.SetColor(jojo::random(256), jojo::random(256), jojo::random(256), 255);
 			star.Draw(jojo::g_renderer);
 		}
 

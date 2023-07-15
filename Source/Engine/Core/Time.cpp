@@ -1,6 +1,6 @@
 #include "Time.h"
 
-namespace kiko
+namespace jojo
 {
 	Time g_time;
 
