@@ -21,7 +21,7 @@ public:
 	{
 		m_pos += m_vel + kiko::g_time.GetDeltaTime();
 		if (m_pos.x >= width) m_pos.x = 0;
-		if (m_pos.x >= height) m_pos.x = 0;
+		if (m_pos.x >= height) m_pos.x = 200;
 	}
 
 	void Draw(jojo::Renderer& renderer)
@@ -36,6 +36,8 @@ public:
 
 int main(int argc, char* argv[])
 {
+
+
 	auto m1 = jojo::Max(4.0f, 3.0f);
 	int m2 = jojo::Max(4, 3);
 
@@ -62,7 +64,7 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < 1000; i++)
 	{
 		jojo::Vector2 pos(kiko::random(jojo::g_renderer.GetWidth()), kiko::random(jojo::g_renderer.GetHeight()));
-		jojo::Vector2 vel(kiko::randomf(100, 400), 0.0f);
+		jojo::Vector2 vel(kiko::randomf(100,400), 0.0f);
 		Stars.push_back(Star(pos, vel));
 	}
 
@@ -75,13 +77,13 @@ int main(int argc, char* argv[])
 
 	Player player{200, jojo::Pi, {{400,300},0,6}, model };
 
-	std::vector<Enemy> eneimies;
+	std::vector<Enemy> enemies;
 	Enemy enemy{200, jojo::Pi, {{400,300}, kiko::randomf(jojo::Pi), 3}, model};
 
 	for (int i = 0; i < 20; i++) 
 	{
 		Enemy enemy{ 200, jojo::Pi, {{400,300}, kiko::randomf(jojo::Pi), 3}, model };
-		eneimies.push_back(enemy);
+		enemies.push_back(enemy);
 	}
 
 	//Main game loop
@@ -97,7 +99,7 @@ int main(int argc, char* argv[])
 		}
 
 		player.Update(kiko::g_time.GetDeltaTime());
-		for(auto& enemy : eneimies) enemy.Update(kiko::g_time.GetDeltaTime());
+		for(auto& enemy : enemies) enemy.Update(kiko::g_time.GetDeltaTime());
 
 
 		//jojo::vec2 direction;
@@ -129,7 +131,7 @@ int main(int argc, char* argv[])
 		}
 
 		player.Draw(jojo::g_renderer);
-		for (auto& enemy : eneimies) enemy.Draw(jojo::g_renderer);
+		for (auto& enemy : enemies) enemy.Draw(jojo::g_renderer);
 		
 
 		//model.Draw(jojo::g_renderer, transform.position, transform.rotation, transform.scale);
