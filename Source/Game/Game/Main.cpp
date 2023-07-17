@@ -43,8 +43,8 @@ int main(int argc, char* argv[])
 	audioSystem.Initialize();
 	audioSystem.AddAudio("hit", "Hit.wav");
 
-	auto m1 = jojo::Max(4.0f, 3.0f);
-	int m2 = jojo::Max(4, 3);
+	//auto m1 = jojo::Max(4.0f, 3.0f);
+	//int m2 = jojo::Max(4, 3);
 
 	constexpr float a = jojo::DegreesToRadians(180);
 
@@ -109,6 +109,7 @@ int main(int argc, char* argv[])
 		audioSystem.Update();
 		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
 		{
+			audioSystem.PlayOneShot("hit");
 			audioSystem.PlayOneShot("hit");
 		}		
 

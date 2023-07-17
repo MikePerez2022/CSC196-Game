@@ -3,7 +3,7 @@ namespace jojo
 {
 	bool AudioSystem::Initialize()
 	{
-		FMOD::System_Create(&m_fmodSystem);
+		FMOD::System_Create(& m_fmodSystem);
 		void* extradriverdata = nullptr;
 		m_fmodSystem->init(32, FMOD_INIT_NORMAL, extradriverdata);
 		return true;

@@ -3,15 +3,15 @@
 
 using namespace std;
 
-jojo::MemoryTracker jojo::g_memoryTracker;
 
 inline void* operator new (size_t size)
 {
+	
 	void* p = malloc(size);
 
 	jojo::g_memoryTracker.add(p, size);
 
-	
+		
 	return p;
 }
 
@@ -25,6 +25,8 @@ inline void operator delete (void* address, size_t size)
 
 namespace jojo
 {
+	MemoryTracker g_memoryTracker;
+
 	void jojo::MemoryTracker::add(void* address, size_t size)
 	{
 		m_bytesAllocated += size;
