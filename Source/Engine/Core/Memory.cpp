@@ -7,7 +7,7 @@ using namespace std;
 inline void* operator new (size_t size)
 {
 	
-	void* p = malloc(size);
+	void* p = std::malloc(size);
 
 	jojo::g_memoryTracker.add(p, size);
 
@@ -19,7 +19,7 @@ inline void operator delete (void* address, size_t size)
 {
 	jojo::g_memoryTracker.remove(address, size);
 
-	free(address);
+	std::free(address);
 
 }
 

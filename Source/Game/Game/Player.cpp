@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Input/InputSystem.h"
 #include "Renderer/Renderer.h"
+#include "..\Game\Bullet.h"
 
 void Player::Update(float dt)
 {
@@ -17,5 +18,16 @@ void Player::Update(float dt)
 	m_transform.position += forward * m_speed * thrust * jojo::g_time.GetDeltaTime();
 	m_transform.position.x = jojo::Wrap(m_transform.position.x, (float)jojo::g_renderer.GetWidth());
 	m_transform.position.y = jojo::Wrap(m_transform.position.y, (float)jojo::g_renderer.GetHeight());
+
+	// fire
+
+	if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_X) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_X))
+	{
+		jojo::Transform transform{m_transform.position, m_transform.rotation, m_transform.scale};
+		Bullet* bullet = new Bullet{ 200, m_transform, m_model };
+		//m_scene->Add(bullet);
+		//m_scene = bullet;
+	}
+	
 }
 

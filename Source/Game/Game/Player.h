@@ -1,7 +1,7 @@
 #pragma once
-#include "Actor.h"
+#include "..\Engine\Framework\Actor.h"
 
-class Player : public Actor
+class Player : public jojo::Actor
 {
 public:
 	Player() = default;

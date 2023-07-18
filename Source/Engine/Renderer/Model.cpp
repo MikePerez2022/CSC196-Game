@@ -5,11 +5,11 @@ namespace jojo
 {
 	bool Model::Load(const std::string& fileName)
 	{
-		std::string buffer;
+		std::string buffer = "";
 
 		jojo::readFile(fileName, buffer);
 		
-		std::istringstream stream(buffer);
+		std::stringstream stream(buffer);
 		
 		std::string line;
 		std::getline(stream, line);
@@ -17,9 +17,9 @@ namespace jojo
 		int numpoints = std::stoi(line);
 
 		for (int i = 0; i < numpoints; i++) {
-			vec2 point;
+			//vec2 point = buffer;
 			
-			m_points.push_back(point);
+			//m_points.push_back(point);
 		}
 
 		return true;

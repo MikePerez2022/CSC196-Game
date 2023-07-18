@@ -30,7 +30,7 @@ namespace jojo
 		return ec.value() == 0;
 	}
 
-	bool readFile(const std::filesystem::path& path, std::string buffer)
+	bool readFile(const std::filesystem::path& path, std::string& buffer)
 	{
 		if (!fileExsists(path)) return false;
 

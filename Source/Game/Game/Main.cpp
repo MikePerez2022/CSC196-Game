@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "..\Engine\Audio\AudioSystem.h"
+#include "Framework/Scene.h"
+
 #include <iostream>
 #include <vector>
 #include <thread>
@@ -36,18 +38,7 @@ public:
 };
 
 int main(int argc, char* argv[])
-{
-
-	jojo::AudioSystem audioSystem;
-
-	audioSystem.Initialize();
-	audioSystem.AddAudio("hit", "Hit.wav");
-
-	//auto m1 = jojo::Max(4.0f, 3.0f);
-	//int m2 = jojo::Max(4, 3);
-
-	constexpr float a = jojo::DegreesToRadians(180);
-
+{	
 	jojo::seedRandom((unsigned int)time(nullptr));
 	jojo::setFilePath("assets");
 
@@ -58,10 +49,14 @@ int main(int argc, char* argv[])
 
 	jojo::g_inputSystem.Initialize();
 
+	jojo::g_audioSystem.Initialize();
+	jojo::g_audioSystem.AddAudio("laser", "laser.wav"); 
+	jojo::g_audioSystem.AddAudio("hit", "hit.wav");
+
 
 	std::vector<jojo::vec2> pointsj{ {-3, -2}, { 0,4 }, { 3,-2 }, { 0,-1 }, { -3, -2 } }; //{ {-10, 5}, { 10,5 }, { 0,-5 }, { -10,5 } };
- 	jojo::Model model(pointsj);
-	//model.Load("ship.TXT");
+	jojo::Model model(pointsj);
+	//model.Load("ship.txt");
 
 
 	vector<Star> Stars; 
@@ -75,20 +70,15 @@ int main(int argc, char* argv[])
 
 	jojo::Transform transform{ {400, 300}, 0, 3};
 
+	jojo::Scene scene;
 
-	jojo::vec2 position(400, 300);
-	float speed = 200;
-	constexpr float turnRate = jojo::DegreesToRadians(180);
+	scene.Add(new Player{ 200, jojo::Pi, {{400,300},0,6}, model });
 
-	Player player{200, jojo::Pi, {{400,300},0,6}, model };
-
-	std::vector<Enemy> enemies;
-	Enemy enemy{200, jojo::Pi, {{400,300}, jojo::randomf(jojo::Pi), 3}, model};
-
+		
 	for (int i = 0; i < 20; i++) 
 	{
-		Enemy enemy{ 200, jojo::Pi, {{400,300}, jojo::randomf(jojo::Pi), 3}, model };
-		enemies.push_back(enemy);
+		Enemy* enemy = new Enemy{ 200, jojo::Pi, {{400,300}, jojo::randomf(jojo::Pi), 3}, model };
+		scene.Add(enemy);
 	}
 
 	//Main game loop
@@ -103,14 +93,15 @@ int main(int argc, char* argv[])
 			quit = true;
 		}
 
-		player.Update(jojo::g_time.GetDeltaTime());
-		for(auto& enemy : enemies) enemy.Update(jojo::g_time.GetDeltaTime());
+		scene.Update(jojo::g_time.GetDeltaTime());
 
-		audioSystem.Update();
+		//for(auto& enemy : ) enemy.Update(jojo::g_time.GetDeltaTime());
+
+		jojo::g_audioSystem.Update();
+		
 		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
 		{
-			audioSystem.PlayOneShot("hit");
-			audioSystem.PlayOneShot("hit");
+			jojo::g_audioSystem.PlayOneShot("laser");
 		}		
 
 
@@ -142,15 +133,17 @@ int main(int argc, char* argv[])
 			star.Draw(jojo::g_renderer);
 		}
 
-		player.Draw(jojo::g_renderer);
-		for (auto& enemy : enemies) enemy.Draw(jojo::g_renderer);
-		
+		scene.Draw(jojo::g_renderer);
 
+		//for (auto& enemy : ) enemy.Draw(jojo::g_renderer);
 		//model.Draw(jojo::g_renderer, transform.position, transform.rotation, transform.scale);
 		
 		jojo::g_renderer.EndFrame();
 
+		
+
 
 	}
 	return 0;
+	jojo::g_audioSystem.Shutdown();
 }

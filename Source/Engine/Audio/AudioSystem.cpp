@@ -1,9 +1,12 @@
 #include "AudioSystem.h"
+
 namespace jojo
 {
+	AudioSystem g_audioSystem;
+
 	bool AudioSystem::Initialize()
 	{
-		FMOD::System_Create(& m_fmodSystem);
+		FMOD::System_Create(&m_fmodSystem);
 		void* extradriverdata = nullptr;
 		m_fmodSystem->init(32, FMOD_INIT_NORMAL, extradriverdata);
 		return true;
@@ -21,10 +24,11 @@ namespace jojo
 	}
 	void AudioSystem::AddAudio(const std::string& name, const std::string& filename)
 	{
+		
 		if (m_sounds.find(name) == m_sounds.end())
 		{
 			FMOD::Sound* sound = nullptr;
-			m_fmodSystem -> createSound(filename.c_str(), FMOD_DEFAULT, 0, &sound);
+			m_fmodSystem->createSound(filename.c_str(), FMOD_DEFAULT, 0, &sound);
 			m_sounds[name] = sound;
 		}
 	}

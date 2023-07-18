@@ -1,0 +1,38 @@
+#include "Scene.h"
+#include "Actor.h"
+
+namespace jojo
+{
+	void Scene::Update(float gt)
+	{
+		for (auto actor : m_actors)
+		{
+			actor->Update(jojo::g_time.GetDeltaTime());
+		}
+	}
+
+	void Scene::Draw(Renderer& renderer)
+	{
+		for (auto actor : m_actors)
+		{
+			actor->Draw(renderer);
+		}
+	}
+
+	void Scene::Add(Actor* actor)
+	{
+		//actor->m_scene = this;
+		m_actors.push_back(actor);
+	}
+
+	void Scene::Remove(Actor* actor)
+	{
+		m_actors.remove(actor);
+	}
+
+	void Scene::RemoveAll()
+	{
+		m_actors.clear();
+	}
+
+}
