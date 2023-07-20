@@ -1,5 +1,5 @@
 #pragma once
-#include "Framework/Actor.h"
+#include "..\Engine\Framework\Actor.h"
 
 class Bullet : public jojo::Actor
 {
@@ -11,6 +11,7 @@ public:
 	{}
 
 	void Update(float dt) override;
+	void OnCollision(Actor* actor) override;
 
 protected:
 	float m_speed = 0;

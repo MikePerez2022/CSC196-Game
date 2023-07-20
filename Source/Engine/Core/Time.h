@@ -1,4 +1,5 @@
 #pragma once
+#include "MathUtils.h"
 #include <chrono>
 
 namespace jojo

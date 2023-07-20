@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/Core.h"
 #include "Renderer/Model.h"
-//#include "Scene.h"
+
 
 namespace jojo
 {
@@ -9,17 +9,31 @@ namespace jojo
 	{
 	public:
 		Actor() = default;
-		Actor(const jojo::Transform& transform, const jojo::Model& model) : m_transform{ transform }, m_model{ model } {}
+		Actor(const jojo::Transform& transform, const jojo::Model& model) : 
+			m_transform{ transform },
+			m_model{ model } 
+		{}
 
-		virtual void Update(float dt) = 0;
+		virtual void Update(float dt);
 		virtual void Draw(jojo::Renderer& renderer);
 
-		//friend class scene;
-		//class Scene* m_scene = nullptr;
+		float GetRadius() { return m_model.GetRadius() * m_transform.scale; }
+		virtual void OnCollision(Actor* other) {}
+	
+
+		
+		class Scene* m_scene = nullptr;
+		friend class Scene;
+
+		jojo::Transform m_transform;
+		std::string m_tag;
+		float m_health;
 
 	protected:
-		Transform m_transform;
-		Model m_model;
+		bool m_destroyed = false;
+		float m_lifespan = -1.0f;
+
+		jojo::Model m_model;
 	};
 }
 

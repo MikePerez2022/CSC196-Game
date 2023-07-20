@@ -10,6 +10,7 @@
 #include <iostream>
 #include <vector>
 #include <thread>
+#include <memory>
 
 using namespace std;
 
@@ -38,11 +39,15 @@ public:
 };
 
 int main(int argc, char* argv[])
-{	
+{
+	
+	
 	jojo::seedRandom((unsigned int)time(nullptr));
 	jojo::setFilePath("assets");
 
+	jojo::MemoryTracker::Initialize(); 
 	
+
 	jojo::g_renderer.Initalize();
 	jojo::g_renderer.CreateWindow("CSC196", 800, 600);
 
@@ -54,9 +59,9 @@ int main(int argc, char* argv[])
 	jojo::g_audioSystem.AddAudio("hit", "hit.wav");
 
 
-	std::vector<jojo::vec2> pointsj{ {-3, -2}, { 0,4 }, { 3,-2 }, { 0,-1 }, { -3, -2 } }; //{ {-10, 5}, { 10,5 }, { 0,-5 }, { -10,5 } };
-	jojo::Model model(pointsj);
-	//model.Load("ship.txt");
+	//std::vector<jojo::vec2> pointsj{ {-3, -2}, { 0,4 }, { 3,-2 }, { 0,-1 }, { -3, -2 } }; //{ {-10, 5}, { 10,5 }, { 0,-5 }, { -10,5 } };
+	jojo::Model model;// (pointsj);
+	model.Load("ship.txt");
 
 
 	vector<Star> Stars; 
@@ -72,13 +77,18 @@ int main(int argc, char* argv[])
 
 	jojo::Scene scene;
 
-	scene.Add(new Player{ 200, jojo::Pi, {{400,300},0,6}, model });
+	unique_ptr<Player> player;
+	player = make_unique<Player>(Player::Player( 200, jojo::Pi, jojo::Transform({400,300},0,6), model));
+	player->m_tag = "Player";
+	scene.Add(std::move(player));
 
 		
 	for (int i = 0; i < 20; i++) 
 	{
-		Enemy* enemy = new Enemy{ 200, jojo::Pi, {{400,300}, jojo::randomf(jojo::Pi), 3}, model };
-		scene.Add(enemy);
+		unique_ptr<Enemy> enemy = make_unique<Enemy>(Enemy::Enemy( jojo::randomf(75.0f, 150.0f), jojo::Pi, jojo::Transform({400,300}, 0, 6), model));
+		//Enemy* enemy = new Enemy{ 200, jojo::Pi, {{400,300}, jojo::randomf(jojo::Pi), 3}, model };
+		enemy->m_tag = "Enemy";
+		scene.Add(std::move(enemy));
 	}
 
 	//Main game loop
@@ -94,33 +104,17 @@ int main(int argc, char* argv[])
 		}
 
 		scene.Update(jojo::g_time.GetDeltaTime());
-
-		//for(auto& enemy : ) enemy.Update(jojo::g_time.GetDeltaTime());
+		
 
 		jojo::g_audioSystem.Update();
 		
 		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
 		{
 			jojo::g_audioSystem.PlayOneShot("laser");
-		}		
+		}			
 
-
-		//jojo::vec2 direction;
-		//if (inputSystem.GetKeyDown(SDL_SCANCODE_W)) direction.y = -1;
-		//else if (inputSystem.GetKeyDown(SDL_SCANCODE_A)) direction.x = -1;
-		//else if (inputSystem.GetKeyDown(SDL_SCANCODE_S)) direction.y = 1;
-		//else if (inputSystem.GetKeyDown(SDL_SCANCODE_D)) direction.x = 1;
-
-		//position += direction * speed + kiko::g_time.GetDeltaTime();
-
-		//if (inputSystem.GetMouseButtonDown(0) || inputSystem.GetMouseButtonDown(2) || inputSystem.GetMouseButtonDown(3))
-		//{
-		//	cout << "mouse button pressed" << endl;
-		//
-		//	std::cout << "( " << inputSystem.GetMousePosition().x << ", " << inputSystem.GetMousePosition().y << " )" << endl;
-		//}
 		
-		jojo::g_renderer.SetColor(0, 0, 0, 0);
+		//jojo::g_renderer.SetColor(0, 0, 0, 0);
 		jojo::g_renderer.BeginFrame();
 
 		//draw
@@ -135,15 +129,23 @@ int main(int argc, char* argv[])
 
 		scene.Draw(jojo::g_renderer);
 
-		//for (auto& enemy : ) enemy.Draw(jojo::g_renderer);
-		//model.Draw(jojo::g_renderer, transform.position, transform.rotation, transform.scale);
+		
+		model.Draw(jojo::g_renderer, transform.position, transform.rotation, transform.scale);
 		
 		jojo::g_renderer.EndFrame();
 
+
+		jojo::MemoryTracker::DisplayInfo();
+
 		
-
-
 	}
-	return 0;
+	
+	Stars.clear();
+	scene.RemoveAll();
+	cout << "Bull";
+
 	jojo::g_audioSystem.Shutdown();
+	jojo::MemoryTracker::DisplayInfo();
+
+	return 0;
 }

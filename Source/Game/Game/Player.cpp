@@ -2,9 +2,12 @@
 #include "Input/InputSystem.h"
 #include "Renderer/Renderer.h"
 #include "..\Game\Bullet.h"
+#include "Framework/Scene.h"
 
 void Player::Update(float dt)
 {
+	Actor::Update(dt);
+
 	float rotate = 0;
 	if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_A)) rotate = -1;
 	if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_D)) rotate = 1;
@@ -23,11 +26,21 @@ void Player::Update(float dt)
 
 	if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_X) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_X))
 	{
-		jojo::Transform transform{m_transform.position, m_transform.rotation, m_transform.scale};
-		Bullet* bullet = new Bullet{ 200, m_transform, m_model };
-		//m_scene->Add(bullet);
-		//m_scene = bullet;
+		jojo::Transform transform{m_transform.position, 0, m_transform.scale};
+		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>( Bullet{ 200, transform, m_model });
+		bullet->m_tag = "Player";
+		m_scene->Add(std::move(bullet));
+		
 	}
 	
+}
+
+void Player::OnCollision(Actor* actor)//other
+{
+	if (actor->m_tag == "Enemy") // could change to EnemyBullet tag
+	{
+		m_destroyed = true;
+	}
+
 }
 
