@@ -5,7 +5,7 @@ class Player : public jojo::Actor
 {
 public:
 	Player() = default;
-	Player(float speed, float turnRate, const jojo::Transform& transform, const jojo::Model& model) : 
+	Player(float speed, float turnRate, const jojo::Transform& transform, const std::shared_ptr<jojo::Model> model) :
 		Actor{ transform, model },
 		m_speed{ speed },
 		m_turnRate{ turnRate } 
@@ -14,7 +14,7 @@ public:
 	}
 
 	void Update(float dt) override;
-	void OnCollision(Actor* actor) override;
+	void OnCollision(Actor* other) override;
 
 protected:
 	float m_speed = 0;

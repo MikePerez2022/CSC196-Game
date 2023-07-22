@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Input/InputSystem.h"
 #include "Renderer/Renderer.h"
+#include "Renderer/ModelManager.h"
 #include "..\Game\Bullet.h"
 #include "Framework/Scene.h"
 
@@ -27,7 +28,7 @@ void Player::Update(float dt)
 	if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_X) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_X))
 	{
 		jojo::Transform transform{m_transform.position, 0, m_transform.scale};
-		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>( Bullet{ 200, transform, m_model });
+		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>( Bullet{ 200, transform, jojo::g_modelManager.Get("ship.txt")});
 		bullet->m_tag = "Player";
 		m_scene->Add(std::move(bullet));
 		
@@ -35,9 +36,9 @@ void Player::Update(float dt)
 	
 }
 
-void Player::OnCollision(Actor* actor)//other
+void Player::OnCollision(Actor* other)
 {
-	if (actor->m_tag == "Enemy") // could change to EnemyBullet tag
+	if (other->m_tag == "EnemyBs") // could change to EnemyBullet tag
 	{
 		m_destroyed = true;
 	}

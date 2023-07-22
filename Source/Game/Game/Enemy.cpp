@@ -22,7 +22,7 @@ void Enemy::Update(float dt)
 
 	if (m_fireTimer <= 0) {
 		jojo::Transform transform{m_transform.position, 0, m_transform.scale};
-		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>(Bullet{ 200, transform, m_model });
+		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>(Bullet{ 200, transform, jojo::g_modelManager.Get("ship.txt")});
 		bullet->m_tag = "Enemy";
 		m_scene->Add(std::move(bullet));
 
@@ -30,9 +30,11 @@ void Enemy::Update(float dt)
 	}
 }
 
-void Enemy::OnCollision(Actor* actor)
+void Enemy::OnCollision(Actor* other)
 {
-	if (actor->m_tag == "Player")
+	//dynamic_cast<Player*>(other);
+
+	if (other->m_tag == "Player")
 	{
 		m_destroyed = true;
 	}

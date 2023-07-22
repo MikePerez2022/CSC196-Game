@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "../ThirdParty/SDL2-2.28.0/include/SDL_ttf.h"
 
 namespace jojo
 {
@@ -8,12 +9,16 @@ namespace jojo
 	bool Renderer::Initalize()
 	{
 		SDL_Init(SDL_INIT_VIDEO);
+		TTF_Init();
 
 		return true;
 	}
 
 	void Renderer::ShutDown()
 	{
+		SDL_DestroyRenderer(m_renderer);
+		SDL_DestroyWindow(m_window);
+		TTF_Quit();
 	}
 
 	void Renderer::CreateWindow(const std::string& title, int width, int height)

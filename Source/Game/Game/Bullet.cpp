@@ -10,9 +10,9 @@ void Bullet::Update(float dt)
 	m_transform.position.y = jojo::Wrap(m_transform.position.y, (float)jojo::g_renderer.GetHeight());
 }
 
-void Bullet::OnCollision(Actor* actor)
+void Bullet::OnCollision(Actor* other)
 {
-	if (actor->m_tag != m_tag)
+	if (other->m_tag != m_tag)
 	{
 		m_destroyed = true;
 	}

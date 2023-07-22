@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/MathUtils.h"
+#include "Core/MathUtils.h"//
 #include <cstdint>
 #include <iostream>
 #include <string>
@@ -28,8 +28,6 @@ namespace jojo
 		color.r = std::stof(str);
 
 		line = line.substr(line.find(",") + 1);
-
-		//green
 		str = line.substr(0, line.find(",") + 1);
 		color.g = std::stof(str);
 

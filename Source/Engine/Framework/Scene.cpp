@@ -28,7 +28,7 @@ namespace jojo
 			for (auto iter2 = std::next(iter1, 1); iter2 != m_actors.end(); iter2++)
 			{
 				float distance = (*iter1)->m_transform.position.Distance((*iter2)->m_transform.position);
-				float radius = (*iter1)->m_model.GetRadius() * (*iter2)->m_model.GetRadius();
+				float radius = (*iter1)->m_model->GetRadius() * (*iter2)->m_model->GetRadius();
 
 				if (distance <= radius)
 				{
@@ -43,7 +43,10 @@ namespace jojo
 
 	void Scene::Draw(Renderer& renderer)
 	{
-		for (auto& actor : m_actors) actor->Draw(renderer);
+		for (auto& actor : m_actors)
+		{
+			actor->Draw(renderer);
+		}
 	}
 
 	void Scene::Add(std::unique_ptr<Actor> actor)
