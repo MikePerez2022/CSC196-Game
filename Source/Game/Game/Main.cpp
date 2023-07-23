@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 		Stars.push_back(Star(pos, vel));
 	}
 
-	jojo::Transform transform{ {400, 300}, 0, 3};
+	jojo::Transform transform{ {400, 300}, 0, 3.5f};
 
 	jojo::Scene scene;
 
@@ -84,9 +84,9 @@ int main(int argc, char* argv[])
 	scene.Add(std::move(player));
 
 		
-	for (int i = 0; i < 20; i++) 
+	for (int i = 0; i < 10; i++) 
 	{
-		unique_ptr<Enemy> enemy = make_unique<Enemy>(Enemy::Enemy( jojo::randomf(75.0f, 150.0f), jojo::Pi, transform, jojo::g_modelManager.Get("ship.txt")));
+		unique_ptr<Enemy> enemy = make_unique<Enemy>(Enemy::Enemy( jojo::randomf(75.0f, 150.0f), jojo::Pi, transform, jojo::g_modelManager.Get("enemyShip.txt")));
 		enemy->m_tag = "Enemy";
 		scene.Add(std::move(enemy));
 	}
@@ -103,31 +103,29 @@ int main(int argc, char* argv[])
 			quit = true;
 		}
 
-		scene.Update(jojo::g_time.GetDeltaTime());
-		
-
 		jojo::g_audioSystem.Update();
+
+		scene.Update(jojo::g_time.GetDeltaTime());
 		
 		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
 		{
 			jojo::g_audioSystem.PlayOneShot("laser");
 		}			
-
 		
-		//jojo::g_renderer.SetColor(0, 0, 0, 0);
+
+		jojo::g_renderer.SetColor(0, 0, 0, 0); 
 		jojo::g_renderer.BeginFrame();
 
 		//draw
 
 		scene.Draw(jojo::g_renderer);
-		//model.Draw(jojo::g_renderer, { 400,300 }, 20, 7);
 		text->Draw(jojo::g_renderer, 400, 300);
-		
+				
 		jojo::Vector2 vel(1.0f, 0.3f);
 		for (auto& star : Stars)
 		{
 			star.Update(jojo::g_renderer.GetWidth(), jojo::g_renderer.GetHeight());
-			jojo::g_renderer.SetColor(jojo::random(256), jojo::random(256), jojo::random(256), 255);
+			jojo::g_renderer.SetColor(jojo::random(256), jojo::random(256), jojo::random(256), 255);// This does effect it
 			star.Draw(jojo::g_renderer);
 		}
 

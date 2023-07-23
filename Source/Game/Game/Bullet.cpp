@@ -14,6 +14,6 @@ void Bullet::OnCollision(Actor* other)
 {
 	if (other->m_tag != m_tag)
 	{
-		//m_destroyed = true;
+		m_destroyed = true;
 	}
 }

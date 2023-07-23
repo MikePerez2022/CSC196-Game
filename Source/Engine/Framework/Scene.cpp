@@ -12,14 +12,7 @@ namespace jojo
 		{
 			(*iter)->Update(dt);
 			((*iter)->m_destroyed) ? iter = m_actors.erase(iter) : iter++;
-			//if ((*iter)->m_destroyed)
-			//{
-			//	iter = m_actors.erase(iter);
-			//}
-			//else 
-			//{
-			//	iter++;
-			//}
+			
 		}
 
 		// check colisions

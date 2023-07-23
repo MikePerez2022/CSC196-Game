@@ -27,7 +27,7 @@ void Player::Update(float dt)
 
 	if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
 	{
-		jojo::Transform transform{m_transform.position, m_transform.rotation, 1};
+		jojo::Transform transform{m_transform.position, m_transform.rotation, 2};
 		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>( Bullet{ 350, transform, jojo::g_modelManager.Get("ship.txt")});
 		bullet->m_tag = "Player";
 		m_scene->Add(std::move(bullet));
