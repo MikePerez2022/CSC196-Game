@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
 	jojo::seedRandom((unsigned int)time(nullptr));
 	jojo::setFilePath("assets");
 
-	jojo::MemoryTracker::Initialize(); //
+	jojo::MemoryTracker::Initialize();
 
 	jojo::g_renderer.Initalize();
 	jojo::g_renderer.CreateWindow("CSC196", 800, 600); 
@@ -56,14 +56,9 @@ int main(int argc, char* argv[])
 	jojo::g_audioSystem.AddAudio("laser", "laser.wav"); 
 	jojo::g_audioSystem.AddAudio("hit", "hit.wav");
 
-	std::shared_ptr<jojo::Font> font = std::make_shared<jojo::Font>("Vendetta.ttf", 24);
-
-	std::unique_ptr<jojo::Text> text = std::make_unique<jojo::Text>(font);
-	text->Create(jojo::g_renderer, "NEUMONT", jojo::Color{ 1, 1, 1, 1 });
-
-	
-	jojo::Model model;
-	model.Load("ship.txt");
+	std::shared_ptr<jojo::Font> font = std::make_shared<jojo::Font>("Vendetta.ttf", 50);//--------------
+	std::unique_ptr<jojo::Text> text = std::make_unique<jojo::Text>(font);//--------------
+	text->Create(jojo::g_renderer, "KILLME", jojo::Color{ 91, 1, 1, 1 });//--------------
 
 	vector<Star> Stars; 
 	vector<jojo::Vector2> points;
@@ -74,7 +69,7 @@ int main(int argc, char* argv[])
 		Stars.push_back(Star(pos, vel));
 	}
 
-	jojo::Transform transform{ {400, 300}, 0, 3.5f};
+	jojo::Transform transform{ {400, 300}, 0, 3};
 
 	jojo::Scene scene;
 
@@ -91,6 +86,8 @@ int main(int argc, char* argv[])
 		scene.Add(std::move(enemy));
 	}
 
+
+
 	//Main game loop
 	bool quit = false;	
 	while (!quit) 
@@ -105,7 +102,7 @@ int main(int argc, char* argv[])
 
 		jojo::g_audioSystem.Update();
 
-		scene.Update(jojo::g_time.GetDeltaTime());
+		scene.Update(jojo::g_time.GetDeltaTime());//--------------
 		
 		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
 		{
@@ -113,19 +110,19 @@ int main(int argc, char* argv[])
 		}			
 		
 
-		jojo::g_renderer.SetColor(0, 0, 0, 0); 
+		jojo::g_renderer.SetColor(0, 0, 0, 0);
 		jojo::g_renderer.BeginFrame();
 
 		//draw
 
 		scene.Draw(jojo::g_renderer);
-		text->Draw(jojo::g_renderer, 400, 300);
+		text->Draw(jojo::g_renderer, 400, 300);//--------------
 				
 		jojo::Vector2 vel(1.0f, 0.3f);
 		for (auto& star : Stars)
 		{
 			star.Update(jojo::g_renderer.GetWidth(), jojo::g_renderer.GetHeight());
-			jojo::g_renderer.SetColor(jojo::random(256), jojo::random(256), jojo::random(256), 255);// This does effect it
+			jojo::g_renderer.SetColor(jojo::random(256), jojo::random(256), jojo::random(256), 255);
 			star.Draw(jojo::g_renderer);
 		}
 

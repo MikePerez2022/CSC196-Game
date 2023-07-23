@@ -36,8 +36,9 @@ namespace jojo
 	template <typename T>
 	inline T Clamp(T value, T min, T max)
 	{
-		
-		//if (min > max) std::swap(min, max); //TODO: find out why the swap function is messing up.
+		//T mx, mn = 0;
+		//if (min > max) mn = max; mx = min; max = mx; min = mn;
+		//if (min > max) std::swap(min, max); //TODO: find out why the swap function is messing up.  // This might be causing the problems
 
 		return (value < min) ? min : (value > max) ? max : value;
 	}

@@ -12,7 +12,7 @@ namespace jojo
 	{
 		if (m_ttfFont != NULL) 
 		{
-			TTF_CloseFont(m_ttfFont);
+			TTF_CloseFont(m_ttfFont);//---------
 		}
 	}
 

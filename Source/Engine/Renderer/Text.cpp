@@ -11,7 +11,7 @@ namespace jojo
 
 	void Text::Create(Renderer& renderer, const std::string& text, const Color& color)
 	{
-		SDL_Color c{ Color::ToInt(color.r), Color::ToInt(color.g), Color::ToInt(color.b), Color::ToInt(color.a) };
+		SDL_Color c{ 91, 1, 1, 1 };//Color::ToInt(color.r), Color::ToInt(color.g), Color::ToInt(color.b), Color::ToInt(color.a);
 
 		SDL_Surface* surface = TTF_RenderText_Solid(m_font->m_ttfFont, text.c_str(), c);
 		m_texture = SDL_CreateTextureFromSurface(renderer.m_renderer, surface);
@@ -20,7 +20,7 @@ namespace jojo
 
 	void Text::Draw(Renderer& renderer, int x, int y)
 	{
-		int width, height;
+		int width, height;//----------
 		SDL_QueryTexture(m_texture, nullptr, nullptr, &width, &height);
 
 		SDL_Rect rect{ x, y, width, height };
