@@ -61,12 +61,12 @@ int main(int argc, char* argv[])
 	std::unique_ptr<jojo::Text> text = std::make_unique<jojo::Text>(font);
 	text->Create(jojo::g_renderer, "NEUMONT", jojo::Color{ 1, 1, 1, 1 });
 
-	//std::vector<jojo::vec2> pointsj{ {-3, -2}, { 0,4 }, { 3,-2 }, { 0,-1 }, { -3, -2 } }; //{ {-10, 5}, { 10,5 }, { 0,-5 }, { -10,5 } };
+	
 	jojo::Model model;
 	model.Load("ship.txt");
 
 	vector<Star> Stars; 
-	//vector<jojo::Vector2> points;
+	vector<jojo::Vector2> points;
 	for (int i = 0; i < 1000; i++)
 	{
 		jojo::Vector2 pos(jojo::random(jojo::g_renderer.GetWidth()), jojo::random(jojo::g_renderer.GetHeight()));
@@ -87,7 +87,6 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < 20; i++) 
 	{
 		unique_ptr<Enemy> enemy = make_unique<Enemy>(Enemy::Enemy( jojo::randomf(75.0f, 150.0f), jojo::Pi, transform, jojo::g_modelManager.Get("ship.txt")));
-		//Enemy* enemy = new Enemy{ 200, jojo::Pi, {{400,300}, jojo::randomf(jojo::Pi), 3}, model };
 		enemy->m_tag = "Enemy";
 		scene.Add(std::move(enemy));
 	}
@@ -115,15 +114,13 @@ int main(int argc, char* argv[])
 		}			
 
 		
-		jojo::g_renderer.SetColor(0, 0, 0, 0);
+		//jojo::g_renderer.SetColor(0, 0, 0, 0);
 		jojo::g_renderer.BeginFrame();
 
 		//draw
 
 		scene.Draw(jojo::g_renderer);
-
-		model.Draw(jojo::g_renderer, { 400,300 }, 20, 7);// Why?
-
+		//model.Draw(jojo::g_renderer, { 400,300 }, 20, 7);
 		text->Draw(jojo::g_renderer, 400, 300);
 		
 		jojo::Vector2 vel(1.0f, 0.3f);
@@ -141,10 +138,10 @@ int main(int argc, char* argv[])
 		
 	}
 	
-	//Stars.clear();
-	//scene.RemoveAll();
-	//jojo::g_audioSystem.Shutdown();
-	//jojo::MemoryTracker::DisplayInfo();
+	Stars.clear();
+	scene.RemoveAll();
+	jojo::g_audioSystem.Shutdown();
+	jojo::MemoryTracker::DisplayInfo();
 
 	return 0;
 }

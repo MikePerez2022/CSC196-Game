@@ -22,7 +22,7 @@ namespace jojo
 	
 
 		
-		//class Scene* m_scene = nullptr;
+		class Scene* m_scene; // = nullptr
 		friend class Scene;
 
 		jojo::Transform m_transform;

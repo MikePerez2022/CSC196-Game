@@ -11,11 +11,12 @@ void Enemy::Update(float dt)
 	Player* player = m_scene->GetActor<Player>();
 	if (player)
 	{
-		jojo::vec2 direction = player->m_transform.position - m_transform.position;
-		m_transform.rotation = direction.Angle() + jojo::HalfPi;
+		jojo::vec2 direction = m_transform.position - player->m_transform.position;
+
+		m_transform.rotation = direction.Angle() * jojo::HalfPi;
 	}
 
-	jojo::vec2 forward = jojo::vec2{ 0,-1 }.Rotate(m_transform.rotation);
+	jojo::vec2 forward = jojo::vec2{ 0,1 }.Rotate(m_transform.rotation);
 	m_transform.position += forward * m_speed * jojo::g_time.GetDeltaTime();
 	m_transform.position.x = jojo::Wrap(m_transform.position.x, (float)jojo::g_renderer.GetWidth());
 	m_transform.position.y = jojo::Wrap(m_transform.position.y, (float)jojo::g_renderer.GetHeight());
@@ -36,6 +37,6 @@ void Enemy::OnCollision(Actor* other)
 
 	if (other->m_tag == "Player")
 	{
-		m_destroyed = true;
+		//m_destroyed = true;
 	}
 }

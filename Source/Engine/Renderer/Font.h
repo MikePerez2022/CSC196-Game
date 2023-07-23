@@ -14,7 +14,7 @@ namespace jojo
 
 		void Load(const std::string& fileName, int fontSize);
 
-	private:
-		_TTF_Font* m_ttfFont = nullptr;
+		_TTF_Font* m_ttfFont = nullptr;//
+	protected:
 	};
 }

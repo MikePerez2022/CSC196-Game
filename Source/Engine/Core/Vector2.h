@@ -41,7 +41,7 @@ namespace jojo
 		Vector2 Normalized() const { return *this / Length(); }
 		void Normalize() { *this /= Length(); }
 
-		float Angle() const { return std::atan2f(y,x); }
+		float Angle() const { return std::atan2f(y,x); }//
 		Vector2 Rotate(float radiants) const;
 	};
 

@@ -25,10 +25,10 @@ void Player::Update(float dt)
 
 	// fire
 
-	if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_X) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_X))
+	if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
 	{
-		jojo::Transform transform{m_transform.position, 0, m_transform.scale};
-		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>( Bullet{ 200, transform, jojo::g_modelManager.Get("ship.txt")});
+		jojo::Transform transform{m_transform.position, m_transform.rotation, 1};
+		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>( Bullet{ 350, transform, jojo::g_modelManager.Get("ship.txt")});
 		bullet->m_tag = "Player";
 		m_scene->Add(std::move(bullet));
 		
@@ -38,7 +38,7 @@ void Player::Update(float dt)
 
 void Player::OnCollision(Actor* other)
 {
-	if (other->m_tag == "EnemyBs") // could change to EnemyBullet tag
+	if (other->m_tag == "EnemyBullet")
 	{
 		m_destroyed = true;
 	}
