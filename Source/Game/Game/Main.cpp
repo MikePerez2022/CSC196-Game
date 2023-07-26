@@ -9,6 +9,8 @@
 #include "Renderer/Text.h"
 #include "Renderer/Font.h"
 
+#include "SpaceGame.h"
+
 #include <iostream>
 #include <vector>
 #include <thread>
@@ -50,15 +52,12 @@ int main(int argc, char* argv[])
 	jojo::g_renderer.Initalize();
 	jojo::g_renderer.CreateWindow("CSC196", 800, 600); 
 
-	jojo::g_inputSystem.Initialize(); 
-
+	jojo::g_inputSystem.Initialize();
 	jojo::g_audioSystem.Initialize();
-	jojo::g_audioSystem.AddAudio("laser", "laser.wav"); 
-	jojo::g_audioSystem.AddAudio("hit", "hit.wav");
 
-	std::shared_ptr<jojo::Font> font = std::make_shared<jojo::Font>("Vendetta.ttf", 50);//--------------
-	std::unique_ptr<jojo::Text> text = std::make_unique<jojo::Text>(font);//--------------
-	text->Create(jojo::g_renderer, "KILLME", jojo::Color{ 91, 1, 1, 1 });//--------------
+
+	unique_ptr<SpaceGame> game = std::make_unique<SpaceGame>();
+	game->Initalize();
 
 	vector<Star> Stars; 
 	vector<jojo::Vector2> points;
@@ -69,24 +68,16 @@ int main(int argc, char* argv[])
 		Stars.push_back(Star(pos, vel));
 	}
 
-	jojo::Transform transform{ {400, 300}, 0, 3};
-
-	jojo::Scene scene;
-
-	unique_ptr<Player> player;
-	player = make_unique<Player>(Player::Player( 200, jojo::Pi, jojo::Transform({400,300},0,6), jojo::g_modelManager.Get("ship.txt")));
-	player->m_tag = "Player";
-	scene.Add(std::move(player));
-
-		
-	for (int i = 0; i < 10; i++) 
-	{
-		unique_ptr<Enemy> enemy = make_unique<Enemy>(Enemy::Enemy( jojo::randomf(75.0f, 150.0f), jojo::Pi, transform, jojo::g_modelManager.Get("enemyShip.txt")));
-		enemy->m_tag = "Enemy";
-		scene.Add(std::move(enemy));
-	}
-
-
+	//jojo::Transform transform{ {400, 300}, 0, 3};
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	std::unique_ptr<Enemy> enemy = make_unique<Enemy>(Enemy::Enemy(jojo::randomf(75.0f, 150.0f), jojo::Pi, jojo::Transform({ 400,300 }, 0, 3), jojo::g_modelManager.Get("enemyShip.txt")));
+	//	enemy->m_tag = "Enemy";
+	//	m_scene.Add(std::move(enemy));
+	//}	
+	//std::shared_ptr<jojo::Font> testFont = std::make_shared<jojo::Font>("Vendetta.ttf", 40);
+	//std::unique_ptr<jojo::Text> test = std::make_unique<jojo::Text>(testFont);
+	
 
 	//Main game loop
 	bool quit = false;	
@@ -102,40 +93,32 @@ int main(int argc, char* argv[])
 
 		jojo::g_audioSystem.Update();
 
-		scene.Update(jojo::g_time.GetDeltaTime());//--------------
+		game->Update(jojo::g_time.GetDeltaTime());
 		
 		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
 		{
 			jojo::g_audioSystem.PlayOneShot("laser");
-		}			
-		
+		}
 
 		jojo::g_renderer.SetColor(0, 0, 0, 0);
 		jojo::g_renderer.BeginFrame();
 
 		//draw
-
-		scene.Draw(jojo::g_renderer);
-		text->Draw(jojo::g_renderer, 400, 300);//--------------
+		game->Draw(jojo::g_renderer);
 				
 		jojo::Vector2 vel(1.0f, 0.3f);
 		for (auto& star : Stars)
 		{
 			star.Update(jojo::g_renderer.GetWidth(), jojo::g_renderer.GetHeight());
-			jojo::g_renderer.SetColor(jojo::random(256), jojo::random(256), jojo::random(256), 255);
+			jojo::g_renderer.SetColor(jojo::random(256), jojo::random(256), jojo::random(256), 200);
 			star.Draw(jojo::g_renderer);
 		}
 
-		jojo::g_renderer.EndFrame();
-
-		jojo::MemoryTracker::DisplayInfo();
-
-		
+		jojo::g_renderer.EndFrame();		
 	}
 	
 	Stars.clear();
-	scene.RemoveAll();
-	jojo::g_audioSystem.Shutdown();
+	jojo::g_audioSystem.Shutdown(); 
 	jojo::MemoryTracker::DisplayInfo();
 
 	return 0;

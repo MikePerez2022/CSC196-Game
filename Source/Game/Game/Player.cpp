@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "SpaceGame.h"
 #include "Input/InputSystem.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/ModelManager.h"
@@ -40,7 +41,9 @@ void Player::OnCollision(Actor* other)
 {
 	if (other->m_tag == "EnemyBullet")
 	{
-		m_destroyed = true;
+		m_game->SetLives(m_game->GetLives() - 1);
+		dynamic_cast<SpaceGame*>(m_game)->SetState(SpaceGame::eState::PlayerDead);
+		//m_destroyed = true;
 	}
 
 }

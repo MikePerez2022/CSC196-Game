@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Renderer/Renderer.h"
 #include "Bullet.h"
+#include "SpaceGame.h"
 
 void Enemy::Update(float dt)
 {
@@ -37,6 +38,7 @@ void Enemy::OnCollision(Actor* other)
 
 	if (other->m_tag == "Player")
 	{
-		//m_destroyed = true;
+		m_game->AddPoints(100);
+		m_destroyed = true;
 	}
 }
