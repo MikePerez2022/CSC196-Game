@@ -23,7 +23,7 @@ void Player::Update(float dt)
 	jojo::vec2 forward = jojo::vec2{ 0,1 }.Rotate(m_transform.rotation);
 	AddForce(forward * m_speed * thrust * dt);
 
-	//m_transform.position += forward * m_speed * thrust * jojo::g_time.GetDeltaTime(); //________-------------------------------
+
 	m_transform.position.x = jojo::Wrap(m_transform.position.x, (float)jojo::g_renderer.GetWidth());
 	m_transform.position.y = jojo::Wrap(m_transform.position.y, (float)jojo::g_renderer.GetHeight());
 
@@ -33,7 +33,7 @@ void Player::Update(float dt)
 	{
 		jojo::Transform transform{m_transform.position, m_transform.rotation - jojo::DegreesToRadians(5), 2};
 		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>( Bullet{ 350, transform, jojo::g_modelManager.Get("ship.txt")});
-		bullet->m_tag = "Player";//change to bullet
+		bullet->m_tag = "Player";
 		m_scene->Add(std::move(bullet));
 
 		jojo::Transform transform2{m_transform.position, m_transform.rotation + jojo::DegreesToRadians(5), 2};

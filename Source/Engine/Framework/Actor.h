@@ -19,8 +19,6 @@ namespace jojo
 		virtual void Draw(jojo::Renderer& renderer);
 
 		float GetRadius() { return (m_model) ? m_model->GetRadius() * m_transform.scale : 0; }
-		
-		//float GetRadius() { return m_model->GetRadius() * m_transform.scale; }
 		virtual void OnCollision(Actor* other) {}
 	
 		void AddForce(vec2 force) { m_velocity += force; }
@@ -30,7 +28,7 @@ namespace jojo
 		friend class Scene;
 		class Game* m_game = nullptr;
 
-		//friend class emiter;
+
 
 		jojo::Transform m_transform;
 		std::string m_tag;
@@ -44,8 +42,6 @@ namespace jojo
 
 		vec2 m_velocity;
 		float m_dampening = 0;
-
-		//jojo::Model m_model;
 	};
 }
 

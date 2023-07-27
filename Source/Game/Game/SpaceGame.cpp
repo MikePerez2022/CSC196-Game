@@ -19,15 +19,15 @@ bool SpaceGame::Initalize()
 	std::shared_ptr<jojo::Font> font = std::make_shared<jojo::Font>("ArcadeClassic.ttf", 24);
 	std::unique_ptr<jojo::Text> text = std::make_unique<jojo::Text>(font);
 	text->Create(jojo::g_renderer, "NEUMONT", jojo::Color{ 81, 90, 1, 255 });
-	m_font = font;//
+	m_font = font;
 
-	m_scoreText = std::make_unique<jojo::Text>(font);//
+	m_scoreText = std::make_unique<jojo::Text>(font);
 	m_scoreText->Create(jojo::g_renderer, "ooooo", jojo::Color{ 1, 90, 71, 255 });
 
-	m_titleText = std::make_unique<jojo::Text>(font);//
-	m_titleText->Create(jojo::g_renderer, "SPACE GAME", jojo::Color{ 91, 1, 1, 255 });//
+	m_titleText = std::make_unique<jojo::Text>(font);
+	m_titleText->Create(jojo::g_renderer, "SPACE GAME", jojo::Color{ 91, 1, 1, 255 });
 
-	m_addText = std::make_unique<jojo::Text>(font);//
+	m_addText = std::make_unique<jojo::Text>(font);
 	
 
 	//Load Audio
@@ -48,22 +48,6 @@ bool SpaceGame::Shutdown()
 
 void SpaceGame::Update(float dt)
 {
-	jojo::EmitterData data;
-	data.burst = true;
-	data.burstCount = 100;
-	data.spawnRate = 200;
-	data.angle = 0;
-	data.angleRange = jojo::Pi;
-	data.lifetimeMin = 1.5f;
-	data.lifetimeMax = 3.5f;
-	data.speedMin = 50.0f;
-	data.speedMax = 250.0f;
-	data.damping = 0.5f;
-	data.color = jojo::Color{ 222, 31, 21, 255 };
-	jojo::Transform transform{ { jojo::g_inputSystem.GetMousePosition() }, 0, 3 };
-	auto emitter = std::make_unique<jojo::Emitter>(transform, data);
-	emitter->m_lifespan = 1.0f;
-	emitter->m_game = this;
 
 	switch (m_state)
 	{
@@ -120,8 +104,6 @@ void SpaceGame::Update(float dt)
 		break;
 	}
 
-	if (jojo::g_inputSystem.GetMousePosition().x > 0 && jojo::g_inputSystem.GetMousePosition().y > 0) m_scene->Add(std::move(emitter));
-
 	m_scoreText->Create(jojo::g_renderer, "Score  " + std::to_string(m_score), { 1,91,1,255 });
 	//m_addText->Create(jojo::g_renderer, "Lives  " + std::to_string(GetLives()), { 1,91,1,255 });
 	m_scene->Update(dt); 
@@ -135,7 +117,6 @@ void SpaceGame::Draw(jojo::Renderer& renderer)
 		m_titleText->Draw(renderer, 300, 270);
 		m_addText->Draw(renderer, 240, 300);
 		m_scoreText->Draw(renderer, 320, 500);
-		m_scene->Draw(renderer);//----------------
 	}
 	else if (m_state == eState::GameOver)
 	{

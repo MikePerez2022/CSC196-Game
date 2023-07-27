@@ -4,7 +4,6 @@
 
 namespace jojo
 {
-	//void CreateWindow(const std::string& title, int width, int height);
 
 	class Renderer
 	{
@@ -19,7 +18,7 @@ namespace jojo
 		void BeginFrame();
 		void EndFrame();
 
-		//void SetColor(const Color& color);
+
 		void SetColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 		void DrawLine(int x1, int y1, int x2, int y2);
