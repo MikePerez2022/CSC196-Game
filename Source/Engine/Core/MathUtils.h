@@ -1,6 +1,6 @@
 #pragma once
 #include <cmath>
-
+#include <utility>
 
 namespace jojo
 {
@@ -36,12 +36,16 @@ namespace jojo
 	template <typename T>
 	inline T Clamp(T value, T min, T max)
 	{
-		T mx, mn = 0;
-		if (min > max) { mn = max; mx = min; max = mx; min = mn; }
-		else { mx = max; mn = min; }
-		//if (min > max) std::swap(min, max); //TODO: find out why the swap function is messing up.  // This might be causing the problems
+		
+		if (min > max) std::swap(min, max);
 
-		return (value < mn) ? mn : (value > mx) ? mx : value;
+		return (value < min) ? min : (value > max) ? max : value;
+	}
+
+	template<typename T>
+	constexpr T Lerp(const T& a, const T& b, float t)
+	{
+		return (a * (1.0f - t)) + (b * t);
 	}
 
 }

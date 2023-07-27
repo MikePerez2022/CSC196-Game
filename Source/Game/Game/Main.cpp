@@ -10,6 +10,8 @@
 #include "Renderer/Font.h"
 
 #include "SpaceGame.h"
+#include "Renderer/ParticleSystem.h"
+#include "Framework/Emitter.h"
 
 #include <iostream>
 #include <vector>
@@ -43,7 +45,7 @@ public:
 };
 
 int main(int argc, char* argv[])
-{	
+{
 	jojo::seedRandom((unsigned int)time(nullptr));
 	jojo::setFilePath("assets");
 
@@ -68,15 +70,6 @@ int main(int argc, char* argv[])
 		Stars.push_back(Star(pos, vel));
 	}
 
-	//jojo::Transform transform{ {400, 300}, 0, 3};
-	//for (int i = 0; i < 10; i++)
-	//{
-	//	std::unique_ptr<Enemy> enemy = make_unique<Enemy>(Enemy::Enemy(jojo::randomf(75.0f, 150.0f), jojo::Pi, jojo::Transform({ 400,300 }, 0, 3), jojo::g_modelManager.Get("enemyShip.txt")));
-	//	enemy->m_tag = "Enemy";
-	//	m_scene.Add(std::move(enemy));
-	//}	
-	//std::shared_ptr<jojo::Font> testFont = std::make_shared<jojo::Font>("Vendetta.ttf", 40);
-	//std::unique_ptr<jojo::Text> test = std::make_unique<jojo::Text>(testFont);
 	
 
 	//Main game loop
@@ -94,10 +87,12 @@ int main(int argc, char* argv[])
 		jojo::g_audioSystem.Update();
 
 		game->Update(jojo::g_time.GetDeltaTime());
+
+		jojo::g_particleSystem.Update(jojo::g_time.GetDeltaTime());
 		
 		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
 		{
-			jojo::g_audioSystem.PlayOneShot("laser");
+			jojo::g_audioSystem.PlayOneShot("laser", false);
 		}
 
 		jojo::g_renderer.SetColor(0, 0, 0, 0);
@@ -105,6 +100,7 @@ int main(int argc, char* argv[])
 
 		//draw
 		game->Draw(jojo::g_renderer);
+		jojo::g_particleSystem.Draw(jojo::g_renderer);
 				
 		jojo::Vector2 vel(1.0f, 0.3f);
 		for (auto& star : Stars)

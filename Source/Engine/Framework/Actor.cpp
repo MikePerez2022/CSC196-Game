@@ -6,9 +6,12 @@ namespace jojo
 	{
 		if (m_lifespan != -1) 
 		{
-			m_lifespan -= jojo::g_time.GetDeltaTime();
+			m_lifespan -= dt;
 			m_destroyed = (m_lifespan <= 0);
 		}
+
+		m_transform.position += m_velocity * dt;//m_velocity
+		m_velocity += std::pow(1.0f - m_dampening, dt);
 	}
 	void Actor::Draw(jojo::Renderer& renderer)
 	{

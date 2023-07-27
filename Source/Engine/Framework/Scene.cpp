@@ -5,10 +5,9 @@ namespace jojo
 {
 	void Scene::Update(float dt)
 	{
-		//for (auto& actor : m_actors) actor->Update(dt);
-		
+
 		auto iter = m_actors.begin();
-		while (iter != m_actors.end()) 
+		while (iter != m_actors.end())
 		{
 			(*iter)->Update(dt);
 			((*iter)->m_destroyed) ? iter = m_actors.erase(iter) : iter++;
@@ -19,7 +18,7 @@ namespace jojo
 		for (auto iter1 = m_actors.begin(); iter1 != m_actors.end(); iter1++)
 		{
 			for (auto iter2 = std::next(iter1, 1); iter2 != m_actors.end(); iter2++)
-			{
+			{	
 				float distance = (*iter1)->m_transform.position.Distance((*iter2)->m_transform.position);
 				float radius = (*iter1)->m_model->GetRadius() * (*iter2)->m_model->GetRadius();
 
@@ -27,8 +26,8 @@ namespace jojo
 				{
 					(*iter1)->OnCollision(iter2->get());
 					(*iter2)->OnCollision(iter1->get());
-				}
-			}
+				}				
+			}			
 
 		}
 

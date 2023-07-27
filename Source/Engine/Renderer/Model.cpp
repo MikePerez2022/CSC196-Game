@@ -32,7 +32,7 @@ namespace jojo
 	}
 	void Model::Draw(Renderer& renderer, const vec2& position, float rotation, float scale)
 	{
-		if (m_points.empty()) return;
+		if (m_points.empty()) return;//-------
 
 		jojo::g_renderer.SetColor(Color::ToInt(m_color.r), Color::ToInt(m_color.g), Color::ToInt(m_color.b), Color::ToInt(m_color.a));
 		for (int i = 0; i < m_points.size() - 1; i++)
@@ -47,12 +47,14 @@ namespace jojo
 	void Model::Draw(Renderer& renderer, const Transform& transform)
 	{		
 		Draw(renderer, transform.position, transform.rotation, transform.scale);
-		renderer.SetColor(Color::ToInt(m_color.r), Color::ToInt(m_color.g), Color::ToInt(m_color.b), Color::ToInt(m_color.a));
+		//renderer.SetColor(Color::ToInt(m_color.r), Color::ToInt(m_color.g), Color::ToInt(m_color.b), Color::ToInt(m_color.a));
 	}
 
-	float Model::GetRadius()
+	float Model::GetRadius() 
 	{
-		if (m_radius) return m_radius;// m_radius != 0
+		if (this == nullptr) return 0;//--------------
+
+		if (m_radius) return m_radius;
 
 		for (auto& point : m_points)
 		{

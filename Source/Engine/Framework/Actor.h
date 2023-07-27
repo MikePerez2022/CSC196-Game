@@ -13,28 +13,38 @@ namespace jojo
 			m_transform{ transform },
 			m_model{ model } 
 		{}
+		Actor(const jojo::Transform& transform) : m_transform{ transform } {} 
 
 		virtual void Update(float dt);
 		virtual void Draw(jojo::Renderer& renderer);
 
-		float GetRadius() { return m_model->GetRadius() * m_transform.scale; }
+		float GetRadius() { return (m_model) ? m_model->GetRadius() * m_transform.scale : 0; }
+		
+		//float GetRadius() { return m_model->GetRadius() * m_transform.scale; }
 		virtual void OnCollision(Actor* other) {}
 	
-
+		void AddForce(vec2 force) { m_velocity += force; }
+		void SetDampening(float dampening) { m_dampening = dampening; }
 		
-		class Scene* m_scene; // = nullptr
+		class Scene* m_scene = nullptr;
 		friend class Scene;
 		class Game* m_game = nullptr;
 
+		//friend class emiter;
+
 		jojo::Transform m_transform;
 		std::string m_tag;
-		float m_health;
+		float m_health = 0;
+		float m_lifespan = -1;
 
 	protected:
 		bool m_destroyed = false;
-		float m_lifespan = -1;
 
 		std::shared_ptr<Model> m_model;
+
+		vec2 m_velocity;
+		float m_dampening = 0;
+
 		//jojo::Model m_model;
 	};
 }

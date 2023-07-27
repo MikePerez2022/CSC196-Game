@@ -21,7 +21,7 @@ namespace jojo
 		void AddPoints(int points) { m_score += points; }
 
 		int GetLives() const { return m_lives; }
-		void SetLives(int lives) { m_score = lives; }
+		void SetLives(int lives) { m_lives = lives; }
 
 		friend class SpaceGame;
 
