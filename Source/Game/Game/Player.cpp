@@ -28,8 +28,8 @@ void Player::Update(float dt)
 	m_transform.position.y = jojo::Wrap(m_transform.position.y, (float)jojo::g_renderer.GetHeight());
 
 	// fire
-
-	if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
+	m_coolDownTimer += dt;
+	if (m_coolDownTimer >= m_coolDown && jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_SPACE) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_SPACE))
 	{
 		jojo::Transform transform{m_transform.position, m_transform.rotation - jojo::DegreesToRadians(5), 2};
 		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>( Bullet{ 350, transform, jojo::g_modelManager.Get("ship.txt")});
@@ -40,6 +40,8 @@ void Player::Update(float dt)
 		bullet = std::make_unique<Bullet>(Bullet{ 350, transform2, jojo::g_modelManager.Get("ship.txt") });
 		bullet->m_tag = "Player";
 		m_scene->Add(std::move(bullet));
+
+		m_coolDownTimer = 0;
 		
 	}
 
@@ -52,10 +54,16 @@ void Player::OnCollision(Actor* other)
 {
 	if (other->m_tag == "Enemy")
 	{
-		m_game->SetLives(m_game->GetLives() - 1);
-		dynamic_cast<SpaceGame*>(m_game)->SetState(SpaceGame::eState::PlayerDeadStart);
-		m_destroyed = true;
+		m_health -= 25; //4 hits
 
+		if (m_health <= 0) 
+		{
+			m_game->SetLives(m_game->GetLives() - 1);
+			dynamic_cast<SpaceGame*>(m_game)->SetState(SpaceGame::eState::PlayerDeadStart);
+			m_destroyed = true;
+		}
+
+		jojo::g_audioSystem.PlayOneShot("hit", false);
 		
 	}
 

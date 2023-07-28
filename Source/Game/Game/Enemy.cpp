@@ -67,5 +67,8 @@ void Enemy::OnCollision(Actor* other)
 		auto emitter = std::make_unique<jojo::Emitter>(transform, data);
 		emitter->m_lifespan = 1.0f;
 		m_scene->Add(std::move(emitter));
+
+
+		jojo::g_audioSystem.PlayOneShot("hit", false);
 	}
 }

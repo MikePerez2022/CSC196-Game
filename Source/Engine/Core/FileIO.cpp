@@ -45,4 +45,32 @@ namespace jojo
 
 		return true;
 	}
+	void writeFile(const std::filesystem::path& path, std::string& text)
+	{
+		std::ofstream stream;
+
+		stream.open(path);
+
+		stream << text;
+
+		stream.close();
+	}
+	std::string loadFile(const std::filesystem::path& path)
+	{
+		if (!fileExsists(path)) return "";
+
+		size_t size;
+		if (!getFileSize(path, size)) return "";
+
+		std::string text;
+
+		text.resize(size);
+
+		std::ifstream stream(path);
+		stream.read(text.data(), size);
+
+		stream.close();
+
+		return text;
+	}
 }

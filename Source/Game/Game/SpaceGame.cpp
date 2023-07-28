@@ -1,6 +1,7 @@
 #include "SpaceGame.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Asteroid.h"
 
 #include "Framework/Scene.h"
 #include "Renderer/ParticleSystem.h"
@@ -22,6 +23,7 @@ bool SpaceGame::Initalize()
 	m_font = font;
 
 	m_scoreText = std::make_unique<jojo::Text>(font);
+	m_highscoreText = std::make_unique<jojo::Text>(font);
 	m_scoreText->Create(jojo::g_renderer, "ooooo", jojo::Color{ 1, 90, 71, 255 });
 
 	m_titleText = std::make_unique<jojo::Text>(font);
@@ -33,6 +35,10 @@ bool SpaceGame::Initalize()
 	//Load Audio
 	jojo::g_audioSystem.AddAudio("laser", "laser.wav");
 	jojo::g_audioSystem.AddAudio("hit", "hit.wav");
+	jojo::g_audioSystem.AddAudio("gameover", "GameOver.wav");
+	jojo::g_audioSystem.AddAudio("gameplay", "gameplay.wav");
+	jojo::g_audioSystem.AddAudio("intro", "Intro.wav");
+	jojo::g_audioSystem.AddAudio("over", "over.wav");
 
 	//scene
 	m_scene = std::make_unique<jojo::Scene>();
@@ -55,6 +61,7 @@ void SpaceGame::Update(float dt)
 		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_X) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_X))
 		{
 			m_state = eState::StartGame;
+
 		}
 		break;
 	case SpaceGame::eState::StartGame:
@@ -66,6 +73,7 @@ void SpaceGame::Update(float dt)
 		m_scene->RemoveAll();
 	{
 		std::unique_ptr<Player> player = std::make_unique<Player>(Player::Player(200, jojo::Pi, jojo::Transform({ 400,300 }, 0, 6), jojo::g_modelManager.Get("ship.txt")));
+		player->m_health = 100;
 		player->m_tag = "Player";
 		player->SetDampening(1);
 		player->m_game = this;
@@ -83,7 +91,20 @@ void SpaceGame::Update(float dt)
 			enemy->SetDampening(1);
 			enemy->m_game = this;
 			m_scene->Add(std::move(enemy));
+
 		}
+		m_spawnAsteroidTimer += dt;
+		if (m_spawnAsteroidTimer >= m_spawnTimeAsteroid)
+		{
+			m_spawnAsteroidTimer = 0;
+			m_spawnTimeAsteroid = jojo::randomf(5.0f, 10.0f);
+			std::unique_ptr<Asteroid> asteroid = std::make_unique<Asteroid>(jojo::randomf(20.0f, 150.0f), 0, jojo::Transform{{jojo::random(10, 700), 0}, 0, 6}, jojo::g_modelManager.Get("Asteroid.txt"));
+			asteroid->m_tag = "Enemy";
+			asteroid->SetDampening(1);
+			asteroid->m_game = this;
+			m_scene->Add(std::move(asteroid));
+		}
+
 		break;
 	case eState::PlayerDeadStart:
 		m_scene->RemoveAll();
@@ -104,8 +125,8 @@ void SpaceGame::Update(float dt)
 		break;
 	}
 
-	m_scoreText->Create(jojo::g_renderer, "Score  " + std::to_string(m_score), { 1,91,1,255 });
-	//m_addText->Create(jojo::g_renderer, "Lives  " + std::to_string(GetLives()), { 1,91,1,255 });
+	m_scoreText->Create(jojo::g_renderer, "Score  " + std::to_string(m_score) + "          " + "Lives  " + std::to_string(GetLives()), {21,91,1,255});
+	m_highscoreText->Create(jojo::g_renderer, "HIGHSCORE  " + jojo::loadFile("highscore.txt"), {218,0,218,255});
 	m_scene->Update(dt); 
 }
 
@@ -114,9 +135,17 @@ void SpaceGame::Draw(jojo::Renderer& renderer)
 	if (m_state == eState::Title) {
 		m_addText->Create(jojo::g_renderer, "Press  X  to  Start  Game", jojo::Color{ 91, 1, 1, 255 });
 
-		m_titleText->Draw(renderer, 300, 270);
-		m_addText->Draw(renderer, 240, 300);
-		m_scoreText->Draw(renderer, 320, 500);
+		m_titleText->Draw(renderer, 340, 270);
+		m_addText->Draw(renderer, 280, 300);
+		m_scoreText->Draw(renderer, 290, 500);
+		m_highscoreText->Draw(renderer, 310, 100);
+
+		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_P) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_P))
+		{
+			jojo::g_audioSystem.PlayOneShot("gameplay", true);
+			//jojo::g_audioSystem.PlayOneShot("intro", false);
+		}
+
 	}
 	else if (m_state == eState::GameOver)
 	{
@@ -124,12 +153,32 @@ void SpaceGame::Draw(jojo::Renderer& renderer)
 		m_addText->Create(jojo::g_renderer, "Press  R  to  Restart  or  Esc  to  leave", jojo::Color{ 255, 0, 0, 255 });
 		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_R) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_R)) m_state = eState::StartGame;
 		m_titleText->Draw(renderer,320, 350);
-		m_addText->Draw(renderer,200, 400);
+		m_addText->Draw(renderer,180, 400);
+		if (m_score > std::stoi(jojo::loadFile("highscore.txt")))
+		{
+			std::string input = std::to_string(GetScore());
+			jojo::writeFile("highscore.txt", input);
+		}
+		m_highscoreText->Draw(renderer, 290, 100);
+
+		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_P) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_P))
+		{
+			//jojo::g_audioSystem.PlayOneShot("gameover", false);
+			//jojo::g_audioSystem.PlayOneShot("over", false);
+		}
+
+		
 	}
 	else
 	{
-		m_scoreText->Draw(renderer, 320, 500);
+		m_scoreText->Draw(renderer, 290, 500);
 		m_scene->Draw(renderer);
+		if (jojo::g_inputSystem.GetKeyDown(SDL_SCANCODE_P) && !jojo::g_inputSystem.GetPreviousKeyDown(SDL_SCANCODE_P))
+		{
+			//jojo::g_audioSystem.PlayOneShot("gameplay", true);
+		}
 	}
+
+	
 
 }

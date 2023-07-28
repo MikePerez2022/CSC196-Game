@@ -19,4 +19,7 @@ public:
 protected:
 	float m_speed = 0;
 	float m_turnRate = 0;
+
+	float m_coolDown = 1.5f;
+	float m_coolDownTimer = 0;
 };

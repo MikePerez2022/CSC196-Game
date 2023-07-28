@@ -19,11 +19,13 @@ namespace jojo
 
 		int GetScore() const { return m_score; }
 		void AddPoints(int points) { m_score += points; }
+		void RemovePoints(int points) { m_score -= points; }
 
 		int GetLives() const { return m_lives; }
 		void SetLives(int lives) { m_lives = lives; }
 
 		friend class SpaceGame;
+		friend class Asteroid;
 
 	protected:
 		std::unique_ptr<class Scene> m_scene;

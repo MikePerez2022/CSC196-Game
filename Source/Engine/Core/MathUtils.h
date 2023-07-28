@@ -21,6 +21,7 @@ namespace jojo
 		return std::fmod(value, max) + ((value < 0) ? max : 0);
 	}
 
+
 	template <typename T>
 	inline T Max(T a, T b)
 	{

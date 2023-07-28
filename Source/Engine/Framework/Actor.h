@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Core.h"
 #include "Renderer/Model.h"
+#include "Audio/AudioSystem.h"
 #include <memory>
 
 namespace jojo
